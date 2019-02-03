@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Handling Form Submission</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h1>Results in ms:</h1>
+<table cellspacing="0" cellpadding="8" border="1">
+    <tr>
+        <td>Device name</td>
+        <td>duration1 (ms)</td>
+        <td>thread duration1 (ms)</td>
+        <td>vs</td>
+        <td>duration2 (ms)</td>
+        <td>thread duration2 (ms)</td>
+    </tr>
+    <tr th:each="resultValue:${configuration.results}">
+        <td th:value="${resultValue.deviceName}" th:text="${resultValue.deviceName}"/>
+        <td th:value="${resultValue.duration1}" th:text="${resultValue.duration1}"/>
+        <td th:value="${resultValue.threadDuration1}" th:text="${resultValue.threadDuration1}"/>
+        <td>-</td>
+        <td th:value="${resultValue.duration2}" th:text="${resultValue.duration2}"/>
+        <td th:value="${resultValue.threadDuration2}" th:text="${resultValue.threadDuration2}"/>
+    </tr>
+</table>
+
+<a href="/perf">Start another performance test</a>
+</body>
+</html>

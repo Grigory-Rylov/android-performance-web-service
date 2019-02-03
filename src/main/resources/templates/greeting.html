@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Performance test</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h1>Source code performance test.</h1>
+<h2>Use field `Object result` (`var result: Any? = null` in kotlin) to avoid removing code by
+    optimizer</h2>
+<form action="#" th:action="@{/perf}" th:object="${configuration}" method="post">
+    <table cellspacing="0" id="maket">
+        <!-- source type selector -->
+        <tr>
+            <td>
+                <select name="sourceType1" th:field="*{sourceType1}">
+                    <option
+                            th:each="dropdownValue:${typeSingleSelectAllValues}"
+                            th:value="${dropdownValue}"
+                            th:text="${dropdownValue}"/>
+                </select>
+            </td>
+            <td>
+                <select name="sourceType2"
+                        th:field="*{sourceType2}">
+                    <option
+                            th:each="dropdownValue:${typeSingleSelectAllValues}"
+                            th:value="${dropdownValue}"
+                            th:text="${dropdownValue}"/>
+                </select>
+            </td>
+        </tr>
+
+        <!-- import area -->
+        <tr>
+            <td>
+                import 1 <textarea rows="10" cols="60" name="import1"
+                                   th:field="*{import1}"></textarea>
+            </td>
+            <td>
+                import 2 <textarea rows="10" cols="60" name="import2"
+                                   th:field="*{import2}"></textarea>
+            </td>
+        </tr>
+
+        <!-- source text area -->
+        <tr>
+            <td>source 1 <textarea rows="20" cols="60" name="source1"
+                                   th:field="*{source1}"></textarea></td>
+            <td>source 2 <textarea rows="20" cols="60" name="source2"
+                                   th:field="*{source2}"></textarea></td>
+        </tr>
+    </table>
+
+    <p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/></p>
+</form>
+</body>
+</html>
