@@ -3,56 +3,242 @@
 <head>
     <title>Performance test</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <link rel="stylesheet" href="lib/codemirror.css">
+    <script src="lib/codemirror.js"></script>
+    <!-- <script src="mode/javascript/javascript.js"></script> -->
+    <script src="mode/clike/clike.js"></script>
+    <script src="mode/xml/xml.js"></script>
+
+    <link rel="stylesheet" href="addon/dialog/dialog.css">
+    <script src="addon/dialog/dialog.js"></script>
+    <script src="addon/search/searchcursor.js"></script>
+    <script src="addon/search/search.js"></script>
+    <style type="text/css">
+        #leftPanel { /* Левая колонка */
+            float: left; /* Обтекание справа */
+            width: 40%; /* Ширина колонки */
+        }
+        #rightPanel { /* Правая колонка */
+            margin-left:10%; /* Отступ слева */
+        }
+    </style>
 </head>
 <body>
 <h1>Source code performance test.</h1>
 <h2>Use field `Object result` (`var result: Any? = null` in kotlin) to avoid removing code by
     optimizer</h2>
 <form action="#" th:action="@{/perf}" th:object="${configuration}" method="post">
-    <table cellspacing="0" id="maket">
-        <!-- source type selector -->
-        <tr>
-            <td>
-                <select name="sourceType1" th:field="*{sourceType1}">
-                    <option
-                            th:each="dropdownValue:${typeSingleSelectAllValues}"
-                            th:value="${dropdownValue}"
-                            th:text="${dropdownValue}"/>
-                </select>
-            </td>
-            <td>
-                <select name="sourceType2"
-                        th:field="*{sourceType2}">
-                    <option
-                            th:each="dropdownValue:${typeSingleSelectAllValues}"
-                            th:value="${dropdownValue}"
-                            th:text="${dropdownValue}"/>
-                </select>
-            </td>
-        </tr>
+    <div id="leftPanel">
+        <h2>Code 1</h2>
+        <p>
+            <select id="sourceType1" onchange="onSourceType1Changed()" name="sourceType1"
+                    th:field="*{sourceType1}">
+                <option
+                        th:each="dropdownValue:${typeSingleSelectAllValues}"
+                        th:value="${dropdownValue}"
+                        th:text="${dropdownValue}"/>
+            </select>
+        </p>
 
-        <!-- import area -->
-        <tr>
-            <td>
-                import 1 <textarea rows="10" cols="60" name="import1"
-                                   th:field="*{import1}"></textarea>
-            </td>
-            <td>
-                import 2 <textarea rows="10" cols="60" name="import2"
-                                   th:field="*{import2}"></textarea>
-            </td>
-        </tr>
+        <p><input type="checkbox" id="importOption1" onclick="showHideBlock(this, importEdit1)">import block</p>
+        <p><textarea
+                id="import1"
+                rows="5"
+                cols="60"
+                name="import1"
+                th:field="*{import1}"></textarea></p>
 
-        <!-- source text area -->
-        <tr>
-            <td>source 1 <textarea rows="20" cols="60" name="source1"
-                                   th:field="*{source1}"></textarea></td>
-            <td>source 2 <textarea rows="20" cols="60" name="source2"
-                                   th:field="*{source2}"></textarea></td>
-        </tr>
-    </table>
+        <p><input type="checkbox" id="initOption1" onclick="showHideBlock(this, initEdit1)" >init block</p>
+        <p><textarea
+                id="init1"
+                rows="5"
+                cols="60"
+                name="init1"
+                th:field="*{init1}"></textarea></p>
 
-    <p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/></p>
+        <p><input type="checkbox" id="fieldsOption1" onclick="showHideBlock(this, fieldsEdit1)" >fields and functions</p>
+        <p><textarea
+                id="fields1"
+                rows="5"
+                cols="60"
+                name="fields1"
+                th:field="*{fields1}"></textarea></p>
+
+        <p>source block</p>
+        <p><textarea
+                id="source1"
+                rows="20"
+                cols="60"
+                name="source1"
+                th:field="*{source1}"></textarea></p>
+    </div>
+
+    <div id="rightPanel">
+        <h2>Code 2</h2>
+        <p>
+            <select id="sourceType2" name="sourceType2"
+                    onchange="onSourceType2Changed()"
+                    th:field="*{sourceType2}">
+                <option
+                        th:each="dropdownValue:${typeSingleSelectAllValues}"
+                        th:value="${dropdownValue}"
+                        th:text="${dropdownValue}"/>
+            </select>
+        </p>
+        <p><input type="checkbox" id="importOption2" onclick="showHideBlock(this, importEdit2)" >import block</p>
+        <p>
+            <textarea
+                    id="import2"
+                    rows="5"
+                    cols="60"
+                    name="import2"
+                    th:field="*{import2}"></textarea>
+        </p>
+        <p><input type="checkbox" id="initOption2" onclick="showHideBlock(this, initEdit2)" >init block</p>
+        <p><textarea
+                id="init2"
+                rows="5"
+                cols="60"
+                name="init2"
+                th:field="*{init2}"></textarea></p>
+
+        <p><input type="checkbox" id="fieldsOption2" onclick="showHideBlock(this, fieldsEdit2)" >fields and functions</p>
+        <p><textarea
+                id="fields2"
+                rows="5"
+                cols="60"
+                name="fields2"
+                th:field="*{fields2}"></textarea></p>
+        <p>source block</p>
+        <p>
+            <textarea
+                    id="source2"
+                    rows="20"
+                    cols="60"
+                    name="source2"
+                    th:field="*{source2}"></textarea>
+        </p>
+    </div>
+
+    <p><input type="submit" value="Submit"/></p>
 </form>
+
 </body>
+<script>
+    var importEdit1;
+    var sourceEdit1;
+    var initEdit1;
+    var fieldsEdit1;
+
+    var importEdit2;
+    var sourceEdit2;
+    var initEdit2;
+    var fieldsEdit2;
+
+    function onSourceType1Changed() {
+        langType = document.getElementById("sourceType1").value;
+        console.log("On select 1 changed: " + langType);
+
+        importEdit1.setOption("mode", getModeByLangType(langType));
+        sourceEdit1.setOption("mode", getModeByLangType(langType));
+        initEdit1.setOption("mode", getModeByLangType(langType));
+        fieldsEdit1.setOption("mode", getModeByLangType(langType));
+    }
+
+     function onSourceType2Changed() {
+        langType = document.getElementById("sourceType2").value;
+        console.log("On select 2 changed: " + langType);
+
+        importEdit2.setOption("mode", getModeByLangType(langType));
+        sourceEdit2.setOption("mode", getModeByLangType(langType));
+        initEdit2.setOption("mode", getModeByLangType(langType));
+        fieldsEdit2.setOption("mode", getModeByLangType(langType));
+    }
+
+    function getModeByLangType(langType) {
+        if (langType == "java") {
+            return "text/x-java";
+        }
+        return "text/x-kotlin";
+    }
+
+    window.onload = function() {
+
+        initWithLangTypeSource1("java");
+        initWithLangTypeSource2("java");
+
+        console.log("On page loaded");
+    };
+
+    function initWithLangTypeSource2(langType) {
+        var langMode = getModeByLangType(langType);
+
+        console.log("initWithLangTypeSource2 mode=" + langMode);
+
+        importEdit2 = CodeMirror.fromTextArea(import2, {
+            mode: langMode,
+            lineNumbers: true,
+            lineWrapping: true
+        });
+        importEdit2.getWrapperElement().style.display = "none"
+
+        initEdit2 = CodeMirror.fromTextArea(init2, {
+                mode: langMode,
+                lineNumbers: true,
+                lineWrapping: true
+        });
+        initEdit2.getWrapperElement().style.display = "none"
+
+
+        fieldsEdit2 = CodeMirror.fromTextArea(fields2, {
+                mode: langMode,
+                lineNumbers: true,
+                lineWrapping: true
+        });
+        fieldsEdit2.getWrapperElement().style.display = "none"
+
+        sourceEdit2 = CodeMirror.fromTextArea(source2, {
+                mode: langMode,
+                lineNumbers: true,
+                lineWrapping: true
+        });
+    }
+
+    function initWithLangTypeSource1(langType) {
+        var langMode = getModeByLangType(langType);
+        console.log("initWithLangTypeSource1 mode=" + langMode);
+
+        importEdit1 = CodeMirror.fromTextArea(import1, {
+            mode: langMode,
+            lineNumbers: true,
+            lineWrapping: true
+        });
+        importEdit1.getWrapperElement().style.display = "none"
+
+        initEdit1 = CodeMirror.fromTextArea(init1, {
+                mode: langMode,
+                lineNumbers: true,
+                lineWrapping: true
+        });
+        initEdit1.getWrapperElement().style.display = "none"
+
+        fieldsEdit1 = CodeMirror.fromTextArea(fields1, {
+                mode: langMode,
+                lineNumbers: true,
+                lineWrapping: true
+        });
+        fieldsEdit1.getWrapperElement().style.display = "none"
+
+        sourceEdit1 = CodeMirror.fromTextArea(source1, {
+            mode: langMode,
+            lineNumbers: true,
+            lineWrapping: true
+        });
+    }
+
+    function showHideBlock(checkbox, editBlock) {
+        editBlock.getWrapperElement().style.display = checkbox.checked ? "block" : "none";
+    }
+</script>
 </html>
