@@ -26,10 +26,16 @@ class PerformanceController {
         val launcher = getPerformanceLauncher(configuration.results)
         launcher.measurePerformance("java" == configuration.sourceType1,
                 configuration.import1 ?: "",
+                configuration.fields1 ?: "",
                 configuration.source1 ?: "",
+                configuration.init1 ?: "",
                 "java" == configuration.sourceType2,
                 configuration.import2 ?: "",
-                configuration.source2 ?: "")
+                configuration.fields2 ?: "",
+                configuration.source2 ?: "",
+                configuration.init2 ?: "",
+                configuration.cyclesCount
+        )
         return "result"
     }
 

@@ -22,6 +22,7 @@
         #rightPanel { /* Правая колонка */
             margin-left:10%; /* Отступ слева */
         }
+
     </style>
 </head>
 <body>
@@ -29,6 +30,10 @@
 <h2>Use field `Object result` (`var result: Any? = null` in kotlin) to avoid removing code by
     optimizer</h2>
 <form action="#" th:action="@{/perf}" th:object="${configuration}" method="post">
+    <p>
+        cycles count:
+        <input type="number" name="cyclesCount" value="1" th:field="*{cyclesCount}">
+    </p>
     <div id="leftPanel">
         <h2>Code 1</h2>
         <p>
@@ -41,7 +46,8 @@
             </select>
         </p>
 
-        <p><input type="checkbox" id="importOption1" onclick="showHideBlock(this, importEdit1)">import block</p>
+        <p><input type="checkbox" id="importOption1" onclick="showHideBlock(this, importEdit1)">import
+            block</p>
         <p><textarea
                 id="import1"
                 rows="5"
@@ -49,7 +55,8 @@
                 name="import1"
                 th:field="*{import1}"></textarea></p>
 
-        <p><input type="checkbox" id="initOption1" onclick="showHideBlock(this, initEdit1)" >init block</p>
+        <p><input type="checkbox" id="initOption1" onclick="showHideBlock(this, initEdit1)">init
+            block</p>
         <p><textarea
                 id="init1"
                 rows="5"
@@ -57,7 +64,8 @@
                 name="init1"
                 th:field="*{init1}"></textarea></p>
 
-        <p><input type="checkbox" id="fieldsOption1" onclick="showHideBlock(this, fieldsEdit1)" >fields and functions</p>
+        <p><input type="checkbox" id="fieldsOption1" onclick="showHideBlock(this, fieldsEdit1)">fields
+            and functions</p>
         <p><textarea
                 id="fields1"
                 rows="5"
@@ -86,7 +94,8 @@
                         th:text="${dropdownValue}"/>
             </select>
         </p>
-        <p><input type="checkbox" id="importOption2" onclick="showHideBlock(this, importEdit2)" >import block</p>
+        <p><input type="checkbox" id="importOption2" onclick="showHideBlock(this, importEdit2)">import
+            block</p>
         <p>
             <textarea
                     id="import2"
@@ -95,7 +104,8 @@
                     name="import2"
                     th:field="*{import2}"></textarea>
         </p>
-        <p><input type="checkbox" id="initOption2" onclick="showHideBlock(this, initEdit2)" >init block</p>
+        <p><input type="checkbox" id="initOption2" onclick="showHideBlock(this, initEdit2)">init
+            block</p>
         <p><textarea
                 id="init2"
                 rows="5"
@@ -103,7 +113,8 @@
                 name="init2"
                 th:field="*{init2}"></textarea></p>
 
-        <p><input type="checkbox" id="fieldsOption2" onclick="showHideBlock(this, fieldsEdit2)" >fields and functions</p>
+        <p><input type="checkbox" id="fieldsOption2" onclick="showHideBlock(this, fieldsEdit2)">fields
+            and functions</p>
         <p><textarea
                 id="fields2"
                 rows="5"
@@ -240,5 +251,6 @@
     function showHideBlock(checkbox, editBlock) {
         editBlock.getWrapperElement().style.display = checkbox.checked ? "block" : "none";
     }
+
 </script>
 </html>
