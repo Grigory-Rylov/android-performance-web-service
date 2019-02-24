@@ -2,8 +2,8 @@ package com.github.grishberg.androidperformance
 
 data class PerfomanceResults(
         val deviceName: String,
-        val duration1: Long,
-        val threadDuration1: Long,
-        val duration2: Long,
-        val threadDuration2: Long
+        val duration1: Float,
+        val threadDuration1: Float,
+        val duration2: Float,
+        val threadDuration2: Float
 )

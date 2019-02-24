@@ -6,7 +6,6 @@
 
     <link rel="stylesheet" href="lib/codemirror.css">
     <script src="lib/codemirror.js"></script>
-    <!-- <script src="mode/javascript/javascript.js"></script> -->
     <script src="mode/clike/clike.js"></script>
     <script src="mode/xml/xml.js"></script>
 
@@ -31,8 +30,12 @@
     optimizer</h2>
 <form action="#" th:action="@{/perf}" th:object="${configuration}" method="post">
     <p>
-        cycles count:
-        <input type="number" name="cyclesCount" value="1" th:field="*{cyclesCount}">
+        app launches count:
+        <input type="number" name="launchesCount" value="1" th:field="*{launchesCount}">
+    </p>
+    <p>
+        iterations per launch count:
+        <input type="number" name="iterationsPerLaunchCount" value="500000" th:field="*{iterationsPerLaunchCount}">
     </p>
     <div id="leftPanel">
         <h2>Code 1</h2>

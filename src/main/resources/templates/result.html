@@ -3,9 +3,43 @@
 <head>
     <title>Getting Started: Handling Form Submission</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="lib/codemirror.css">
+    <script src="lib/codemirror.js"></script>
+    <script src="mode/clike/clike.js"></script>
+    <link rel="stylesheet" href="addon/dialog/dialog.css">
+    <style type="text/css">
+        #leftPanel { /* Левая колонка */
+            float: left; /* Обтекание справа */
+            width: 40%; /* Ширина колонки */
+        }
+        #rightPanel { /* Правая колонка */
+            margin-left:10%; /* Отступ слева */
+        }
+
+
+    </style>
 </head>
 <body>
 <h1>Results in ms:</h1>
+
+<div id="leftPanel">
+    <textarea
+            id="source1"
+            rows="5"
+            cols="60"
+            name="source1"
+            th:text="*{configuration.source1}"></textarea>
+</div>
+
+<div id="rightPanel">
+    <textarea
+            id="source2"
+            rows="5"
+            cols="60"
+            name="source2"
+            th:text="*{configuration.source2}"></textarea>
+</div>
+
 <table cellspacing="0" cellpadding="8" border="1">
     <tr>
         <td>Device name</td>

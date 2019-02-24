@@ -23,7 +23,7 @@ class PerformanceController {
 
     @PostMapping("/perf")
     fun greetingSubmit(@ModelAttribute("configuration") configuration: PerformanceConfiguration): String {
-        val launcher = getPerformanceLauncher(configuration.results)
+        val launcher = getPerformanceLauncher(configuration.launchesCount, configuration.results)
         launcher.measurePerformance("java" == configuration.sourceType1,
                 configuration.import1 ?: "",
                 configuration.fields1 ?: "",
@@ -34,7 +34,8 @@ class PerformanceController {
                 configuration.fields2 ?: "",
                 configuration.source2 ?: "",
                 configuration.init2 ?: "",
-                configuration.cyclesCount
+                configuration.launchesCount,
+                configuration.iterationsPerLaunchCount
         )
         return "result"
     }
@@ -42,8 +43,9 @@ class PerformanceController {
     @ModelAttribute("typeSingleSelectAllValues")
     fun getAllTypes() = arrayOf("java", "kotlin")
 
-    private fun getPerformanceLauncher(resultsArray: ArrayList<PerfomanceResults>): PerformanceLauncher {
-        val resultsHolder = ArrayResultsPrinter(resultsArray)
+    private fun getPerformanceLauncher(launchesCount: Int,
+                                       resultsArray: ArrayList<PerfomanceResults>): PerformanceLauncher {
+        val resultsHolder = ArrayResultsPrinter(launchesCount, resultsArray)
         return PerformanceLauncher(resultsHolder, logger)
     }
 }

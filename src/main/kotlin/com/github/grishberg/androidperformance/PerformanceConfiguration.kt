@@ -11,6 +11,7 @@ data class PerformanceConfiguration(
         val fields2: String? = null,
         val source1: String? = null,
         val source2: String? = null,
-        val cyclesCount: Int = 1,
+        val launchesCount: Int = 1,
+        val iterationsPerLaunchCount: Int = 500000,
         val results: ArrayList<PerfomanceResults> = ArrayList()
 )
